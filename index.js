@@ -190,4 +190,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
+    // ── PROJECT VIDEOS: PLAY ONLY WHEN VISIBLE ───
+    const projectVideos = document.querySelectorAll('.project-video');
+    if (projectVideos.length) {
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                const vid = entry.target;
+                if (entry.isIntersecting) {
+                    vid.play().catch(() => { });
+                } else {
+                    vid.pause();
+                }
+            });
+        }, { threshold: 0.25 });
+
+        projectVideos.forEach((vid) => {
+            videoObserver.observe(vid);
+            vid.addEventListener('error', () => {
+                console.warn('Video failed to load:', vid.currentSrc);
+            });
+        });
+    }
+
 });
